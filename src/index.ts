@@ -1,51 +1,85 @@
-import { Builder, Browser, By } from "selenium-webdriver";
-import { io } from "socket.io-client";
+// import { Builder, Browser, By } from "selenium-webdriver";
+// import { io } from "socket.io-client";
 
-import accounts from "./dummy/accounts";
-import { login } from "./features";
-import { LikeBtnXpath } from "./xpaths";
+import { Proxy, VIABuilder, composeProxyServer } from "./features/reg-account";
 
-async function facebook(user: { email: string; password: string }) {
-	const driver = await new Builder().forBrowser(Browser.FIREFOX).build();
-	try {
-		let socket = io("http://localhost:7777");
+// import accounts from "./dummy/accounts";
+// import { login } from "./features";
+// import { LikeBtnXpath } from "./xpaths";
 
-		await driver.get(`https://facebook.com`);
+// async function facebook(user: { email: string; password: string }) {
+// 	const driver = await new Builder().forBrowser(Browser.FIREFOX).build();
+// 	try {
+// 		let socket = io("http://localhost:7777");
 
-		await login(driver, { email: user.email, password: user.password });
+// 		await driver.get(`https://facebook.com`);
 
-		// trong truong hop can thiet phai su dung den cookie: https://viblo.asia/p/tao-mot-tro-ly-ao-tren-facebook-tu-dong-gui-tin-tuc-moi-nhat-hang-ngay-bang-python-selenium-eW65G1L9ZDO
+// 		await login(driver, { email: user.email, password: user.password });
 
-		/*
-            - Xu ly event voi socket (client)
-            - Vi du cac event nhu like, follow cho 1 user nao do
+// 		// trong truong hop can thiet phai su dung den cookie: https://viblo.asia/p/tao-mot-tro-ly-ao-tren-facebook-tu-dong-gui-tin-tuc-moi-nhat-hang-ngay-bang-python-selenium-eW65G1L9ZDO
 
-            Vi du: socket.on("like", data => {
-                // chuyen huong driver toi ${data.to}
-                // xu ly like, follow, ...
-            })
-        */
-		socket.on("like", async (data) => {
-			try {
-				await driver.get(`https://facebook.com/${data.to}`);
-				await driver.sleep(3000);
-				await driver.findElement(By.xpath(LikeBtnXpath)).click();
+// 		/*
+//             - Xu ly event voi socket (client)
+//             - Vi du cac event nhu like, follow cho 1 user nao do
 
-				socket.emit("liked", {
-					msg: `${user.email} liked to ${data.to}`,
-					data: { action: "like", email: user.email, to: data.to },
-				});
+//             Vi du: socket.on("like", data => {
+//                 // chuyen huong driver toi ${data.to}
+//                 // xu ly like, follow, ...
+//             })
+//         */
+// 		socket.on("like", async (data) => {
+// 			try {
+// 				await driver.get(`https://facebook.com/${data.to}`);
+// 				await driver.sleep(3000);
+// 				await driver.findElement(By.xpath(LikeBtnXpath)).click();
 
-				// Se phai xu ly loi neu user die
-			} catch (err) {
-				console.log(`already liked`);
-			}
-		});
-	} catch (err) {
-		console.log(err);
-		await driver.quit();
-	}
-}
-const handers = accounts.map((i) => facebook(i));
+// 				socket.emit("liked", {
+// 					msg: `${user.email} liked to ${data.to}`,
+// 					data: { action: "like", email: user.email, to: data.to },
+// 				});
 
-Promise.all(handers);
+// 				// Se phai xu ly loi neu user die
+// 			} catch (err) {
+// 				console.log(`already liked`);
+// 			}
+// 		});
+// 	} catch (err) {
+// 		console.log(err);
+// 		await driver.quit();
+// 	}
+// }
+// const handers = accounts.map((i) => facebook(i));
+
+// Promise.all(handers);
+
+const host = "http://168.181.55.145";
+const port = "8000";
+const username = "rgMfDg";
+const password = "JdSkZ8";
+
+const proxy = new Proxy({
+	host,
+	port,
+	username,
+	password,
+});
+
+const proxyServer = composeProxyServer(proxy);
+console.log("🚀 ~ file: index.ts:68 ~ proxyServer:", proxyServer);
+
+const viaBuilder = new VIABuilder();
+const viaBuilder2 = new VIABuilder();
+
+const facebookAccount = viaBuilder.setProxy(proxy).build();
+const facebookAccount2 = viaBuilder2.setProxy(proxy).build();
+
+console.log("🚀 ~ file: index.ts:74 ~ facebookAccount2:", facebookAccount2);
+console.log(
+	"🚀 ~ file: index.ts:74 ~ facebookAccount2 proxy",
+	facebookAccount2.getProxyServerArgs()
+);
+console.log("🚀 ~ file: index.ts:72 ~ facebookAccount:", facebookAccount);
+console.log(
+	"🚀 ~ file: index.ts:72 ~ facebookAccount proxy",
+	facebookAccount.getProxyServerArgs()
+);
