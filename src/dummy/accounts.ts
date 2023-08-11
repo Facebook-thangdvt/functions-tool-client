@@ -2,11 +2,11 @@ interface iAccount { email: string, password: string }
 
 const data: iAccount[] = [
     {
-        "email": "EMAIL",
-        "password": "PASSWORD"
+        "email": "tlt.hp69@gmail.com",
+        "password": "DKM004"
     }, {
-        "email": "EMAIL",
-        "password": "PASSWORD"
+        "email": "rsoft.hwang99@gmail.com",
+        "password": "Tungl@ne69"
     }
 ]
 

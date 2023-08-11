@@ -1,9 +1,16 @@
 import { Builder, Browser, By, Key, until } from "selenium-webdriver"
 import { io } from "socket.io-client"
+import mongoose from "mongoose"
 
 import accounts from "./dummy/accounts"
 import { login } from "./features"
 import { LikeBtnXpath } from "./xpaths"
+
+mongoose.connect("mongodb://mongo:bPhHpR4Dyak0WELpkooC@containers-us-west-129.railway.app:7507").then(() => {
+    console.log(`connected`)
+}).catch((err) => {
+    console.log(err)
+})
 
 async function facebook(user: {
     email: string,
@@ -20,16 +27,6 @@ async function facebook(user: {
 
         // trong truong hop can thiet phai su dung den cookie: https://viblo.asia/p/tao-mot-tro-ly-ao-tren-facebook-tu-dong-gui-tin-tuc-moi-nhat-hang-ngay-bang-python-selenium-eW65G1L9ZDO
 
-        /*
-            - Xu ly event voi socket (client)
-            - Vi du cac event nhu like, follow cho 1 user nao do
-
-            Vi du: socket.on("like", data => {
-                // chuyen huong driver toi ${data.to}
-                // xu ly like, follow, ...
-            })
-        */
-
         socket.on("like", async (data) => {
             try {
                 await driver.get(`https://facebook.com/${data.to}`)
@@ -43,6 +40,7 @@ async function facebook(user: {
 
                 // Se phai xu ly loi neu user die
             } catch (err) {
+                console.log(err)
                 console.log(`already liked`)
             }
 
@@ -52,6 +50,6 @@ async function facebook(user: {
         await driver.quit()
     }
 }
-const handers = accounts.map(i => facebook(i))
 
-Promise.all(handers)
+let handlers = accounts.map(i => facebook(i))
+Promise.all(handlers)
