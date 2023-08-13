@@ -1,15 +1,4 @@
-import { Proxy, composeProxyServer } from "./Proxy";
-import Chance from "chance";
-
-const chance = new Chance();
-const randomFristName = chance.first();
-const randomLastName = chance.last();
-const year = chance.year({ min: 1980, max: 2001 });
-const randomDateOfBirth = chance
-	.birthday({ year: year })
-	.toLocaleString()
-	.split(",")[0];
-const randomGender = chance.gender();
+import { Proxy } from "./Proxy";
 
 class VIA implements IVIA {
 	username = "";
@@ -18,14 +7,14 @@ class VIA implements IVIA {
 	password = "";
 	proxy = new Proxy();
 
-	firstName = randomFristName;
-	surName = randomLastName;
+	firstName = "";
+	surName = "";
 	mobileNumber = "";
-	dateOfBirth = randomDateOfBirth;
-	gender: IVIA["gender"] = randomGender;
+	dateOfBirth = "";
+	gender: IVIA["gender"] = 1;
 
 	getProxyServerArgs() {
-		const proxyServer = composeProxyServer(this.proxy);
+		const proxyServer = this.proxy.compose();
 
 		return `--proxy-server=${proxyServer}`;
 	}
@@ -48,7 +37,7 @@ export class VIABuilder {
 		return this;
 	}
 
-	setProxy(proxy: IVIA["proxy"]) {
+	setProxy(proxy: Proxy) {
 		this.via.proxy = proxy;
 
 		return this;

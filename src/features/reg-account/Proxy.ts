@@ -17,8 +17,8 @@ export class Proxy implements IProxy {
 		this.username = username;
 		this.password = password;
 	}
-}
 
-export function composeProxyServer(proxy: Proxy) {
-	return `${proxy.host}:${proxy.port}`;
+	compose() {
+		return `${this.host}:${this.port}`;
+	}
 }

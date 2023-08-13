@@ -1,7 +1,7 @@
 // import { Builder, Browser, By } from "selenium-webdriver";
 // import { io } from "socket.io-client";
 
-import { Proxy, VIABuilder, composeProxyServer } from "./features/reg-account";
+import register from "./features/reg-account";
 
 // import accounts from "./dummy/accounts";
 // import { login } from "./features";
@@ -51,35 +51,4 @@ import { Proxy, VIABuilder, composeProxyServer } from "./features/reg-account";
 // const handers = accounts.map((i) => facebook(i));
 
 // Promise.all(handers);
-
-const host = "http://168.181.55.145";
-const port = "8000";
-const username = "rgMfDg";
-const password = "JdSkZ8";
-
-const proxy = new Proxy({
-	host,
-	port,
-	username,
-	password,
-});
-
-const proxyServer = composeProxyServer(proxy);
-console.log("🚀 ~ file: index.ts:68 ~ proxyServer:", proxyServer);
-
-const viaBuilder = new VIABuilder();
-const viaBuilder2 = new VIABuilder();
-
-const facebookAccount = viaBuilder.setProxy(proxy).build();
-const facebookAccount2 = viaBuilder2.setProxy(proxy).build();
-
-console.log("🚀 ~ file: index.ts:74 ~ facebookAccount2:", facebookAccount2);
-console.log(
-	"🚀 ~ file: index.ts:74 ~ facebookAccount2 proxy",
-	facebookAccount2.getProxyServerArgs()
-);
-console.log("🚀 ~ file: index.ts:72 ~ facebookAccount:", facebookAccount);
-console.log(
-	"🚀 ~ file: index.ts:72 ~ facebookAccount proxy",
-	facebookAccount.getProxyServerArgs()
-);
+register("maiasdfa", "asdfsdf");

@@ -1,2 +1,1 @@
-export * from "./Proxy";
-export * from "./VIA";
+export { default } from "./register";

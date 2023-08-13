@@ -6,6 +6,6 @@ interface IFacebookUserInfo extends Record<TBasicAccount, string> {
 	email: string;
 	mobileNumber: string;
 	dateOfBirth: string;
-	// gender: "male" | "female" | "custom";
-	gender: string;
+	// gender: "male" | "female"
+	gender: 1 | 2;
 }
